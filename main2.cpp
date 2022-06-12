@@ -21,9 +21,10 @@ struct MNIST {
         const char* input_names[] = {"conv2d_input"};
         const char* output_names[] = {"dense_1"};
 
-        auto options = Ort::SessionOptions{};
-        // options.EnableProfiling("prof_"); // won't give the exact call trace but provides some insights on the "nodes" that are called
-        Ort::Session session_{env, "model2.onnx", options};
+        auto session_options = Ort::SessionOptions{};
+        session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_DISABLE_ALL);
+        // session_options.EnableProfiling("prof_"); // won't give the exact call trace but provides some insights on the "nodes" that are called
+        Ort::Session session_{env, "model2.onnx", session_options};
         session_.Run(Ort::RunOptions{nullptr}, input_names, &input_tensor_, 1, output_names, &output_tensor_, 1);
 
         result_ = std::distance(results_.begin(), std::max_element(results_.begin(), results_.end()));
