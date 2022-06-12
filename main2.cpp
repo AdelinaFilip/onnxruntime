@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "include/onnxruntime/core/session/onnxruntime_cxx_api.h"
-#include "include/onnxruntime/core/session/onnxruntime_cxx_inline.h"
+// #include "include/onnxruntime/core/session/onnxruntime_cxx_inline.h"
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
@@ -18,8 +18,8 @@ struct MNIST {
     }
 
     int Run() {
-        const char* input_names[] = {"Input3"};
-        const char* output_names[] = {"Plus214_Output_0"};
+        const char* input_names[] = {"conv2d_input"};
+        const char* output_names[] = {"dense_1"};
 
         session_.Run(Ort::RunOptions{nullptr}, input_names, &input_tensor_, 1, output_names, &output_tensor_, 1);
 
@@ -35,10 +35,9 @@ struct MNIST {
     int result_{0};
 
 private:
-    Ort::Session session_{env, L"model2.onnx", Ort::SessionOptions{nullptr}};
 
     Ort::Value input_tensor_{nullptr};
-    std::array<int64_t, 4> input_shape_{1, 1, 28, height_};
+    std::array<int64_t, 4> input_shape_{1, height_, 28, 1};
 
     Ort::Value output_tensor_{nullptr};
     std::array<int64_t, 2> output_shape_{1, 10};
