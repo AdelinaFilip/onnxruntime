@@ -8,7 +8,7 @@
 #pragma comment(lib, "onnxruntime.lib")
 
 
-Ort::Env env{ORT_LOGGING_LEVEL_WARNING, ""};
+Ort::Env env{ORT_LOGGING_LEVEL_VERBOSE, ""};
 
 struct MNIST {
     MNIST() {
@@ -21,6 +21,9 @@ struct MNIST {
         const char* input_names[] = {"conv2d_input"};
         const char* output_names[] = {"dense_1"};
 
+        auto options = Ort::SessionOptions{};
+        // options.EnableProfiling("prof_"); // won't give the exact call trace but provides some insights on the "nodes" that are called
+        Ort::Session session_{env, "model2.onnx", options};
         session_.Run(Ort::RunOptions{nullptr}, input_names, &input_tensor_, 1, output_names, &output_tensor_, 1);
 
         result_ = std::distance(results_.begin(), std::max_element(results_.begin(), results_.end()));
