@@ -8,6 +8,7 @@
 #include "core/framework/op_kernel.h"
 #include "core/util/math_cpuonly.h"
 #include "core/providers/cpu/element_wise_ranged_transform.h"
+#include <iostream>
 
 namespace onnxruntime {
 
@@ -117,6 +118,8 @@ struct Relu : public ElementWiseRangedTransform<T> {
     return 1.0f;
   }
   void operator()(std::ptrdiff_t first, std::ptrdiff_t last) const final {
+
+    std::cout << "***Hello from CPU Relu***" << std::endl;
     ptrdiff_t len = last - first;
     T* output_ptr = this->output + first;
     ConstEigenVectorArrayMap<T> xm(this->input + first, len);

@@ -172,6 +172,8 @@ Status MaxPoolV8::ComputeImpl(OpKernelContext* context) const {
   // Use MLAS pooling if the index output tensor is not used
   // and also if dilation is not required
 
+  std::cout << "***Hello from MaxPoolV8 CPU***" << std::endl;
+
   bool need_dilation = false;
   for (auto n : pool_attrs_.dilations) {
     need_dilation |= n > 1;
